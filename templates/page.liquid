@@ -1,0 +1,15 @@
+<main id="MainContent" class="page-template" role="main">
+  <div class="page-width width--narrow">
+    <h1 class="page-title">{{ page_title | escape }}</h1>
+    <div class="rte">
+      {{ page.content }}
+    </div>
+  </div>
+</main>
+
+{% schema %}
+{
+  "name": "Page",
+  "tag": "main"
+}
+{% endschema %}

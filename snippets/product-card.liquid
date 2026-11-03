@@ -1,0 +1,40 @@
+<div class="product-card">
+  <div class="product-card__media">
+    <a href="{{ card_product_url | default: product.url }}" class="product-card__link" tabindex="-1" aria-hidden="true">
+      {%- if product.featured_image != blank -%}
+        {{ product.featured_image
+          | image_url: width: 800
+          | image_tag: widths: '375, 540, 750, 800',
+            class: 'product-card__image',
+            loading: 'lazy',
+            sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw'
+        }}
+      {%- elsif placeholder_index -%}
+        {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
+      {%- endif -%}
+    </a>
+
+    {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
+    {%- if first_3d_model -%}
+      <span class="product-card__badge product-card__badge--3d">{{ 'products.product.model3d_badge' | t | default: 'AR' }}</span>
+    {%- endif -%}
+
+    {%- unless product.available -%}
+      <span class="product-card__badge product-card__badge--sold-out">{{ 'products.product.sold_out' | t }}</span>
+    {%- endunless -%}
+
+    {%- if product.compare_at_price > product.price -%}
+      <span class="product-card__badge product-card__badge--sale">{{ 'products.product.on_sale' | t | default: 'Sale' }}</span>
+    {%- endif -%}
+  </div>
+
+  <div class="product-card__info">
+    {%- if show_vendor -%}
+      <p class="product-card__vendor">{{ product.vendor | escape }}</p>
+    {%- endif -%}
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title | escape }}</a>
+    </h3>
+    {% render 'price', product: product %}
+  </div>
+</div>

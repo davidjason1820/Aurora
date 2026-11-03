@@ -1,0 +1,41 @@
+<section class="featured-collection">
+  <div class="page-width">
+    <div class="section-header">
+      <h2 class="section-header__title">{{ section.settings.title | escape }}</h2>
+      {%- if section.settings.collection != blank and section.settings.show_view_all -%}
+        <a href="{{ section.settings.collection.url }}" class="section-header__link">
+          {{ 'collections.general.view_all' | t }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- assign collection = section.settings.collection -%}
+    <div class="product-grid grid--{{ section.settings.columns_desktop }} columns">
+      {%- for product in collection.products limit: section.settings.products_to_show -%}
+        {% render 'product-card', product: product, show_vendor: section.settings.show_vendor %}
+      {%- else -%}
+        {%- for i in (1..section.settings.products_to_show) -%}
+          {% render 'product-card', placeholder_index: i %}
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "Featured products" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 12, "step": 2, "label": "Products to show", "default": 4 },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "label": "Columns on desktop", "default": 4 },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show \"View all\" button", "default": true }
+  ],
+  "presets": [
+    { "name": "Featured collection" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,104 @@
+{
+  "name": "Aurora",
+  "version": "1.0.0",
+  "schema_name": "theme.settings",
+  "schema_version": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo & branding"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 140
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "color_primary",
+      "label": "Primary / buttons",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "color_accent",
+      "label": "Accent",
+      "default": "#b8860b"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "type_heading_font",
+      "label": "Heading font",
+      "default": "serif"
+    },
+    {
+      "type": "font_picker",
+      "id": "type_body_font",
+      "label": "Body font",
+      "default": "sans-serif"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Page max width",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Social"
+    },
+    {
+      "type": "text",
+      "id": "social_twitter_link",
+      "label": "Twitter URL"
+    },
+    {
+      "type": "text",
+      "id": "social_facebook_link",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "text",
+      "id": "social_instagram_link",
+      "label": "Instagram URL"
+    }
+  ]
+}

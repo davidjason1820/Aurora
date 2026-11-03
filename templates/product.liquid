@@ -1,0 +1,121 @@
+<main id="MainContent" class="product-template" role="main">
+  <div class="page-width">
+    {% if product %}
+      <nav class="breadcrumbs" aria-label="{{ 'general.breadcrumbs.title' | t }}">
+        <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home_link_title' | t }}</a>
+        <span aria-hidden="true">/</span>
+        <a href="{{ routes.all_products_collection_url }}">{{ 'general.breadcrumbs.collection_link_title' | t }}</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{{ product.title | escape }}</span>
+      </nav>
+
+      <div class="product-single">
+        <div class="product-single__media">
+          {%- if product.featured_image != blank -%}
+            <div class="product-single__gallery">
+              {{ product.featured_image
+                | image_url: width: 1946
+                | image_tag: widths: '540, 720, 940, 1080, 1946',
+                  class: 'product-single__image',
+                  sizes: '(min-width: 990px) 50vw, 100vw'
+              }}
+            </div>
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-single__placeholder' }}
+          {%- endif -%}
+        </div>
+
+        <div class="product-single__info">
+          <h1 class="product-single__title">{{ product.title | escape }}</h1>
+
+          {%- if section.settings.show_vendor -%}
+            <p class="product-single__vendor">{{ product.vendor | link_to_vendor }}</p>
+          {%- endif -%}
+
+          {% render 'price', product: product %}
+
+          {%- if product.description != blank -%}
+            <div class="product-single__description rte">
+              {{ product.description }}
+            </div>
+          {%- endif -%}
+
+          {% form 'product', product, id: 'product-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' %}
+            <input type="hidden" name="id" id="ProductSelect" value="{{ product.selected_or_first_available_variant.id }}" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+
+            {%- if product.variants.size > 1 -%}
+              <div class="product-form__field">
+                <label for="VariantSelect" class="product-form__label">{{ 'products.product.variant' | t }}</label>
+                <select id="VariantSelect" name="id" class="product-form__input">
+                  {%- for variant in product.variants -%}
+                    <option
+                      {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+                      {% unless variant.available %}disabled{% endunless %}
+                      value="{{ variant.id }}"
+                      data-price="{{ variant.price }}"
+                      data-sold-out="{% unless variant.available %}true{% else %}false{% endunless %}"
+                    >
+                      {{ variant.title }} — {{ variant.price | money }}{% unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endif -%}
+
+            <div class="product-form__quantity">
+              <label for="Quantity" class="product-form__label">{{ 'products.product.quantity' | t }}</label>
+              <input type="number" id="Quantity" name="quantity" value="1" min="1" class="product-form__input product-form__input--quantity">
+            </div>
+
+            <button
+              type="submit"
+              name="add"
+              class="btn btn--primary product-form__submit"
+              {% unless product.available %}disabled{% endunless %}
+            >
+              <span>{%- if product.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}</span>
+            </button>
+
+            {%- if section.settings.show_dynamic_checkout -%}
+              {{ form | payment_button }}
+            {%- endif -%}
+          {% endform %}
+
+          {%- if section.settings.show_share_button -%}
+            <div class="product-single__share">
+              <a href="https://twitter.com/intent/tweet?url={{ page_url | url_encode }}&text={{ product.title | url_encode }}" target="_blank" rel="noopener">{{ 'products.product.share' | t }}</a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if section.settings.enable_related_products and all_products[product.handle] -%}
+        <section class="related-products">
+          <h2>{{ 'products.related.title' | t | default: 'You may also like' }}</h2>
+          <div class="product-grid grid--4 columns">
+            {%- for related in product.collections.first.products limit: 4 -%}
+              {%- unless related.id == product.id -%}
+                {% render 'product-card', product: related %}
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+        </section>
+      {%- endif -%}
+    {% else %}
+      <p>{{ 'products.product.unavailable' | t }}</p>
+    {% endif %}
+  </div>
+</main>
+
+{% schema %}
+{
+  "name": "Product page",
+  "tag": "main",
+  "settings": [
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": true },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout button", "default": true },
+    { "type": "checkbox", "id": "show_share_button", "label": "Show share button", "default": false },
+    { "type": "checkbox", "id": "enable_related_products", "label": "Show related products", "default": true }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,51 @@
+{%- if section.settings.enable -%}
+  <div class="announcement-bar color-scheme-{{ section.settings.color_scheme }}{% if section.settings.link != blank %} has-link{% endif %}" role="region" aria-label="{{ 'sections.header.announcement' | t }}">
+    {%- if section.settings.link != blank -%}
+      <a href="{{ section.settings.link }}" class="announcement-bar__link page-width">
+    {%- else -%}
+      <div class="announcement-bar__inner page-width">
+    {%- endif -%}
+        <p class="announcement-bar__text">{{ section.settings.text | escape }}</p>
+    {%- if section.settings.link != blank -%}
+      </a>
+    {%- else -%}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "Enable announcement bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Message",
+      "default": "Free shipping on orders over $50"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link (optional)"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "1", "label": "Scheme 1" },
+        { "value": "2", "label": "Scheme 2" },
+        { "value": "3", "label": "Scheme 3" }
+      ],
+      "default": "2"
+    }
+  ]
+}
+{% endschema %}

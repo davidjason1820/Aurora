@@ -1,0 +1,42 @@
+<div class="cart-drawer" id="CartDrawer" role="dialog" aria-modal="true" aria-label="{{ 'cart.general.title' | t }}" hidden>
+  <div class="cart-drawer__overlay" data-cart-drawer-close></div>
+  <div class="cart-drawer__panel">
+    <div class="cart-drawer__header">
+      <h2 class="cart-drawer__title">{{ 'cart.general.title' | t }}</h2>
+      <button type="button" class="cart-drawer__close" data-cart-drawer-close aria-label="{{ 'general.accessibility.close' | t | default: 'Close' }}">&times;</button>
+    </div>
+
+    <div class="cart-drawer__body" data-cart-drawer-items>
+      {%- if cart.item_count > 0 -%}
+        {%- for item in cart.items -%}
+          <div class="cart-drawer__item">
+            {%- if item.image -%}
+              {{ item.image | image_url: width: 160 | image_tag: class: 'cart-drawer__item-image', widths: '80, 160' }}
+            {%- endif -%}
+            <div class="cart-drawer__item-details">
+              <a href="{{ item.url }}" class="cart-drawer__item-title">{{ item.product.title | escape }}</a>
+              {%- unless item.product.has_only_default_variant -%}
+                <p class="cart-drawer__item-variant">{{ item.variant.title | escape }}</p>
+              {%- endunless -%}
+              <p class="cart-drawer__item-price">{{ item.final_line_price | money }}</p>
+            </div>
+            <a href="{{ item.url_to_remove }}" class="cart-drawer__item-remove" data-cart-remove>&times;</a>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        <p class="cart-drawer__empty">{{ 'cart.general.empty' | t }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="cart-drawer__footer">
+      <p class="cart-drawer__subtotal">
+        <span>{{ 'cart.general.subtotal' | t }}</span>
+        <span data-cart-drawer-subtotal>{{ cart.total_price | money_with_currency }}</span>
+      </p>
+      <a href="{{ routes.cart_url }}" class="btn btn--secondary cart-drawer__view-cart">{{ 'cart.general.view_cart' | t | default: 'View cart' }}</a>
+      <form action="{{ routes.cart_url }}" method="post">
+        <button type="submit" name="checkout" class="btn btn--primary cart-drawer__checkout">{{ 'cart.general.checkout' | t }}</button>
+      </form>
+    </div>
+  </div>
+</div>

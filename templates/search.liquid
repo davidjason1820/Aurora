@@ -1,0 +1,63 @@
+<main id="MainContent" class="search-template" role="main">
+  <div class="page-width width--narrow">
+    <h1>{{ 'general.search.title' | t }}</h1>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <label class="visually-hidden" for="SearchInput">{{ 'general.search.search' | t }}</label>
+      <input type="hidden" name="options[prefix]" value="last">
+      <input
+        id="SearchInput"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.placeholder' | t }}"
+        class="search-form__input"
+        aria-label="{{ 'general.search.search' | t }}"
+      >
+      <button type="submit" class="btn btn--primary">{{ 'general.search.submit' | t }}</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- if search.results_count > 0 -%}
+        <p class="result-count">
+          {{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}
+        </p>
+        {% paginate search.results by 16 %}
+          <div class="product-grid grid--4 columns">
+            {%- for item in search.results -%}
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  {% render 'product-card', product: item %}
+                {%- else -%}
+                  <div class="search-result-article">
+                    <h3><a href="{{ item.url }}">{{ item.title | escape }}</a></h3>
+                    <p>{{ item.content | strip_html | truncatewords: 25 }}</p>
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <nav class="pagination" aria-label="{{ 'general.pagination.title' | t }}">
+              {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">&laquo;</a>{%- endif -%}
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>
+                {%- else -%}<span{% if part.title == paginate.current_page %} class="current"{% endif %}>{{ part.title }}</span>{%- endif -%}
+              {%- endfor -%}
+              {%- if paginate.next -%}<a href="{{ paginate.next.url }}">&raquo;</a>{%- endif -%}
+            </nav>
+          {%- endif -%}
+        {% endpaginate %}
+      {%- else -%}
+        <p class="search-empty">{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</main>
+
+{% schema %}
+{
+  "name": "Search page",
+  "tag": "main"
+}
+{% endschema %}

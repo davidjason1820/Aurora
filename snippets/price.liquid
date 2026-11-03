@@ -1,0 +1,33 @@
+{%- liquid
+  assign variant_to_use = variant | default: product.selected_or_first_available_variant
+  assign use_minimum = use_minimum_false | default: false
+-%}
+<div class="price" id="Price-{{ product.id }}" data-price-wrapper>
+  {%- if variant_to_use.price_varies and use_minimum == false -%}
+    <em class="price__from">{{ 'products.price.from_price_html' | t: price: '' }}<s></s></em>
+  {%- endif -%}
+
+  <span class="price__regular {% if variant_to_use.compare_at_price > variant_to_use.price %}visually-hidden{% endif %}" data-price-regular>
+    {{ variant_to_use.price | money }}
+  </span>
+
+  {%- if variant_to_use.compare_at_price > variant_to_use.price -%}
+    <span class="price__sale" data-price-sale>
+      <s class="price__compare">{{ variant_to_use.compare_at_price | money }}</s>
+      <span>{{ variant_to_use.price | money }}</span>
+    </span>
+  {%- elsif variant_to_use.compare_at_price != blank -%}
+    <span class="price__unavailable">{{ variant_to_use.price | money }}</span>
+  {%- endif -%}
+
+  {%- if variant_to_use.unit_price_measurement -%}
+    <span class="price__unit">
+      <span>{{ variant_to_use.unit_price | money }}</span>
+      <span aria-hidden="true">/</span>
+      {%- if variant_to_use.unit_price_measurement.reference_value != 1 -%}
+        <span>{{ variant_to_use.unit_price_measurement.reference_value }}</span>
+      {%- endif -%}
+      <span>{{ variant_to_use.unit_price_measurement.reference_unit }}</span>
+    </span>
+  {%- endif -%}
+</div>

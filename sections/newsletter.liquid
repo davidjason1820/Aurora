@@ -1,0 +1,44 @@
+<section class="newsletter color-scheme-{{ section.settings.color_scheme }}">
+  <div class="page-width text--center">
+    <h2 class="newsletter__heading">{{ section.settings.heading | escape }}</h2>
+    {%- if section.settings.subheading != blank -%}
+      <p class="newsletter__subheading">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
+
+    {% form 'customer', class: 'newsletter-form newsletter-form--section' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="newsletter-form__field">
+        <label class="visually-hidden" for="NewsletterSectionEmail">{{ 'newsletter.email_label' | t }}</label>
+        <input id="NewsletterSectionEmail" type="email" name="contact[email]" placeholder="{{ 'newsletter.email_placeholder' | t }}" required autocomplete="email">
+        <button type="submit" class="btn btn--primary">{{ 'newsletter.button_label' | t }}</button>
+      </div>
+      {%- if form.posted_successfully? -%}
+        <p class="form-success" role="status">{{ 'newsletter.success' | t }}</p>
+      {%- elsif form.errors -%}
+        <p class="form-error" role="alert">{{ form.errors.messages[email] }}</p>
+      {%- endif -%}
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Subscribe to our emails" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Be the first to know about new collections and exclusive offers." },
+    { "type": "select", "id": "color_scheme", "label": "Color scheme",
+      "options": [
+        { "value": "1", "label": "Scheme 1" },
+        { "value": "2", "label": "Scheme 2" },
+        { "value": "3", "label": "Scheme 3" }
+      ],
+      "default": "1"
+    }
+  ],
+  "presets": [
+    { "name": "Newsletter" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,38 @@
+{
+  "layout": ["banner", "featured", "rich-text", "newsletter"],
+  "sections": {
+    "banner": {
+      "type": "image-banner",
+      "settings": {
+        "height": 70,
+        "heading": "New season arrivals",
+        "subheading": "Discover the collection",
+        "button_label": "Shop now",
+        "button_link": "/collections/all"
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured products",
+        "products_to_show": 4,
+        "columns_desktop": 4
+      }
+    },
+    "rich-text": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "Talk about your brand",
+        "content_width": "medium",
+        "alignment": "center"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Subscribe to our emails"
+      }
+    }
+  },
+  "order": ["banner", "featured", "rich-text", "newsletter"]
+}
