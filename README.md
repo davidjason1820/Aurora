@@ -1,0 +1,2 @@
+# Aurora
+Building Shopify Theme
