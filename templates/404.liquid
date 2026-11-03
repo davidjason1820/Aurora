@@ -1,0 +1,14 @@
+<main id="MainContent" class="404-template" role="main">
+  <div class="page-width text--center">
+    <h1>{{ 'general.404.title' | t }}</h1>
+    <p>{{ 'general.404.subtext_html' | t | default: 'The page you requested does not exist.' }}</p>
+    <a href="{{ routes.root_url }}" class="btn btn--primary">{{ 'general.404.link' | t }}</a>
+  </div>
+</main>
+
+{% schema %}
+{
+  "name": "404 page",
+  "tag": "main"
+}
+{% endschema %}

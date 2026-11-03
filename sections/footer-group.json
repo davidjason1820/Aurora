@@ -1,0 +1,39 @@
+{
+  "name": "Footer group",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu-1": {
+          "type": "menu",
+          "settings": {
+            "title": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "menu-2": {
+          "type": "menu",
+          "settings": {
+            "title": "Customer care",
+            "menu": "footer"
+          }
+        },
+        "text-1": {
+          "type": "text",
+          "settings": {
+            "title": "About us",
+            "text": "<p>We craft quality goods with care. Thank you for supporting our small business.</p>"
+          }
+        }
+      },
+      "block_order": ["menu-1", "menu-2", "text-1"],
+      "settings": {
+        "enable_newsletter": true,
+        "show_social_icons": true,
+        "show_payment_icons": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

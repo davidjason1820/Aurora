@@ -1,0 +1,119 @@
+<section class="header-section color-scheme-{{ section.settings.color_scheme }}" data-sticky="{{ section.settings.enable_sticky_header }}">
+  <div class="page-width header__inner">
+    <div class="header__logo">
+      {% if section.settings.logo != blank %}
+        {%- assign logo_width = section.settings.logo_width -%}
+        <a href="{{ routes.root_url }}" class="header__logo-link">
+          {{ section.settings.logo
+            | image_url: width: logo_width * 2
+            | image_tag: widths: '100, 200, 300, 400, 500', class: 'header__logo-image', style: 'width: {{ logo_width }}px; height: auto;'
+          }}
+        </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="header__logo-text h2">{{ shop.name }}</a>
+      {% endif %}
+    </div>
+
+    <nav class="header__nav" id="HeaderNav" role="navigation" aria-label="{{ 'general.accessibility.navigation' | t }}">
+      <button class="header__nav-toggle drawer-toggle" aria-controls="HeaderNav" aria-expanded="false">
+        <span class="visually-hidden">{{ 'sections.header.menu' | t }}</span>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <ul class="header__menu list-unstyled">
+        {% for link in linklists[section.settings.menu].links %}
+          <li class="header__menu-item{% if link.links != blank %} has-dropdown{% endif %}">
+            <a href="{{ link.url }}" class="{% if link.active %}is-active{% endif %}" {% if link.current %}aria-current="page"{% endif %}>
+              {{ link.title }}
+            </a>
+            {% if link.links != blank %}
+              <ul class="header__submenu list-unstyled">
+                {% for child in link.links %}
+                  <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      {% if section.settings.show_search %}
+        <a href="{{ routes.search_url }}" class="header__action" aria-label="{{ 'general.search.title' | t }}">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/>
+          </svg>
+        </a>
+      {% endif %}
+      {% if shop.customer_accounts_enabled %}
+        <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__action" aria-label="{{ 'customer.account.title' | t }}">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </a>
+      {% endif %}
+      <a href="{{ routes.cart_url }}" class="header__action cart-drawer-toggle" id="CartDrawerToggle" aria-label="{{ 'cart.general.title' | t }}">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 7h12l-1.5 12h-9L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/>
+        </svg>
+        <span class="cart-count badge" data-cart-count>{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% render 'cart-drawer' %}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 140
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "label": "Enable sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search icon",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "1", "label": "Scheme 1" },
+        { "value": "2", "label": "Scheme 2" },
+        { "value": "3", "label": "Scheme 3" }
+      ],
+      "default": "1"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,23 @@
+{
+  "name": "Header group",
+  "type": "header",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "enable": true,
+        "text": "Free shipping on orders over $50",
+        "link": "/collections/all"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_width": 140,
+        "enable_sticky_header": true,
+        "show_search": true
+      }
+    }
+  },
+  "order": ["announcement", "header"]
+}
